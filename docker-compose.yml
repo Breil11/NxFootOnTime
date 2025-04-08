@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - '3001:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./:/app/
+    environment:
+      - TYPEORM_HOST=db
+      - TYPEORM_PORT=5432
+      - TYPEORM_USERNAME=postgres
+      - TYPEORM_PASSWORD=postgres
+      - TYPEORM_DATABASE=postgres
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
